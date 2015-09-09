@@ -21,7 +21,7 @@ gem "faker"
 gem "responders"
 gem "traceroute"
 gem "rails_12factor", group: :production
-gem 'newrelic_rpm',   group: :production
+gem 'newrelic_rpm'
 gem 'populator'
 
 group :development, :test do
