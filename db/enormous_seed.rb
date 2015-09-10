@@ -5,10 +5,10 @@ module EnormousSeed
   class Seed
     def run
       create_known_users
-      # create_borrowers(32000)
-      # create_lenders(202000)
+      create_borrowers(32000)
+      create_lenders(202000)
       create_categories
-      # create_loan_requests_for_each_borrower(502000)
+      create_loan_requests_for_each_borrower(502000)
       create_orders(52000)
     end
 
@@ -90,9 +90,7 @@ module EnormousSeed
       quantity.times do
         lender = lenders.sample
         request_id = loan_request_ids.sample
-        order = Order.create(cart_items:
-                            { "#{request_id}" => possible_donations.sample },
-                            user_id: lender.id)
+        order = Order.create(cart_items: { "#{request_id}" => possible_donations.sample }, user_id: lender.id)
         order.update_contributed(lender)
         puts "Created Order by Lender #{lender.name}"
       end
