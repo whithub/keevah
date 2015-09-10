@@ -6,3 +6,5 @@ if Rails.env.production?
 else
   SmallSeed::Seed.new.run
 end
+
+

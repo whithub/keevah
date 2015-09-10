@@ -1,11 +1,12 @@
+require 'populator'
+
 module EnormousSeed
   class Seed
     def run
-      create_known_users
-      create_borrowers(30000)
-      create_lenders(200000)
-      create_loan_requests_for_each_borrower(16)
       create_categories
+      25.times { create_lenders }
+      6.times  { create_borrowers }
+      50.times { create_loan_requests }
       create_orders
     end
 
@@ -27,83 +28,70 @@ module EnormousSeed
       User.create(name: "Josh", email: "josh@example.com", password: "password", role: 1)
     end
 
-    def create_lenders(quantity)
-      quantity.times do
-        name = Faker::Name.name
-        email = Faker::Internet.email
-        user = User.create(name: name,
-          password: "password",
-          email: email,
-          role: 0)
-        puts "created lender #{user.name}"
-      end
-    end
-
-    def create_borrowers(quantity)
-      quantity.times do
-        name = Faker::Name.name
-        email = Faker::Internet.email
-        user = User.create(name: name,
-          password: "password",
-          email: email,
-          role: 1)
-        puts "created borrower #{user.name}"
-      end
-    end
-
     def create_categories
-      ["blues", "rock", "jazz", "pop", "country", "metal", "edm", "reggae", "funk", "grunge", "indie", "punk", "r&b", "classical", "opera" ].each do |cat|
+      categories = ["blues", "rock", "jazz", "pop", "country", "metal", "edm", "reggae", "funk", "grunge", "indie", "punk", "r&b", "classical", "opera" ]
+      categories.each do |cat|
         Category.create(title: cat, description: cat + " stuff")
       end
       put_requests_in_categories
     end
 
     def put_requests_in_categories
-      LoanRequest.all.shuffle.each do |request|
-        Category.all.shuffle.first.loan_requests << request
-        puts "linked request and category"
+      categories = Category.all
+
+      LoanRequest.all.each do |request|
+        categories.sample(1).first.loan_requests << request
       end
     end
 
-    def create_loan_requests_for_each_borrower(quantity)
-      quantity.times do
-        borrowers.each do |borrower|
-          title = Faker::Commerce.product_name
-          description = Faker::Company.catch_phrase
-          status = [0, 1].sample
-          request_by =
-            Faker::Time.between(7.days.ago, 3.days.ago)
-          repayment_begin_date =
-            Faker::Time.between(3.days.ago, Time.now)
-          amount = "200"
-          contributed = "0"
-          request = borrower.loan_requests.create(title: title,
-            description: description,
-            amount: amount,
-            status: status,
-            requested_by_date: request_by,
-            contributed: contributed,
-            repayment_rate: "weekly",
-            repayment_begin_date: repayment_begin_date)
-          puts "created loan request #{request.title} for #{borrower.name}"
-          puts "There are now #{LoanRequest.count} requests"
-        end
+    def create_lenders
+      User.populate(8000) do |user|
+        user.name = Faker::Name.name
+        user.email = Faker::Internet.email
+        user.password_digest = "$2a$10$3SBt75c.BIcW/TO6H58FfOgGpKm47GLTWrb/416u9uS6xSAJS7PL6"
+        user.role = 0
       end
+      puts "created 8000 lenders"
+    end
+
+    def create_borrowers
+      User.populate(5000) do |user|
+        user.name = Faker::Name.name
+        user.email = Faker::Internet.email
+        user.password_digest = "$2a$10$3SBt75c.BIcW/TO6H58FfOgGpKm47GLTWrb/416u9uS6xSAJS7PL6"
+        user.role = 1
+      end
+      puts "created 5000 borrowers"
+    end
+
+    def create_loan_requests
+      LoanRequest.populate(10000) do |loan_request|
+        loan_request.user_id = borrowers.sample.id
+        loan_request.title = Faker::Commerce.product_name
+        loan_request.description = Faker::Company.catch_phrase
+        loan_request.status = [0, 1].sample
+        loan_request.repayment_begin_date = Faker::Time.between(3.days.ago, Time.now)
+        loan_request.requested_by_date = Faker::Time.between(7.days.ago, 3.days.ago)
+        loan_request.contributed = "0"
+        loan_request.repayment_rate = 1
+        loan_request.amount = 200
+      end
+      puts "created 10000 loan_requests"
     end
 
     def create_orders
-      loan_requests = LoanRequest.take(50000)
+      loan_requests = LoanRequest.all.sample(50000)
       possible_donations = %w(25, 50, 75, 100, 125, 150, 175, 200)
       loan_requests.each do |request|
         donate = possible_donations.sample
         lender = User.where(role: 0).order("RANDOM()").take(1).first
         order = Order.create(cart_items:
-            { "#{request.id}" => donate },
-          user_id: lender.id)
+                            { "#{request.id}" => donate },
+                            user_id: lender.id)
         order.update_contributed(lender)
-        puts "Created Order for Request #{request.title} by Lender #{lender.name}"
       end
+      puts "created 50000 orders"
     end
-  end
 
+  end
 end
