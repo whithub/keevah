@@ -1,14 +1,14 @@
 require 'populator'
 require 'faker'
 
-module EnormousSeed
+module MassiveSeed
   class Seed
     def run
       create_known_users
       create_borrowers(32000)
       create_lenders(202000)
       create_categories
-      create_loan_requests(502000)
+      create_loan_requests_for_each_borrower(502000)
       create_orders(52000)
     end
 
@@ -21,11 +21,11 @@ module EnormousSeed
     end
 
     def orders
-      @orders ||= Order.all
+      Order.all
     end
 
     def loan_request_ids
-      @loan_request_ids ||= LoanRequest.pluck(:id)
+      @loan_requests ||= LoanRequest.pluck(:id)
     end
 
     def create_known_users
@@ -34,18 +34,11 @@ module EnormousSeed
       User.create(name: "Josh", email: "josh@example.com", password: "password", role: 1)
     end
 
-    def create_categories
-      categories = ["blues", "rock", "jazz", "pop", "country", "metal", "edm", "reggae", "funk", "grunge", "indie", "punk", "r&b", "classical", "opera" ]
-      categories.each do |cat|
-        Category.create(title: cat, description: cat + " stuff")
-      end
-    end
-
     def create_lenders(quantity)
       User.populate(quantity) do |user|
         user.name = Faker::Name.name
         user.email = Faker::Internet.email
-        user.password_digest = "$2a$10$3SBt75c.BIcW/TO6H58FfOgGpKm47GLTWrb/416u9uS6xSAJS7PL6"
+        user.password_digest = "$2a$10$8ip.78OpyOKZrGysQA3urO65VZ.6VbpbXr6JXyKRMKajQyzN4wdLq"
         user.role = 0
         puts "created lender #{user.name}"
       end
@@ -55,17 +48,24 @@ module EnormousSeed
       User.populate(quantity) do |user|
         user.name = Faker::Name.name
         user.email = Faker::Internet.email
-        user.password_digest = "$2a$10$3SBt75c.BIcW/TO6H58FfOgGpKm47GLTWrb/416u9uS6xSAJS7PL6"
+        user.password_digest = "$2a$10$8ip.78OpyOKZrGysQA3urO65VZ.6VbpbXr6JXyKRMKajQyzN4wdLq"
         user.role = 1
         puts "created borrower #{user.name}"
       end
     end
 
-    def create_loan_requests(quantity)
+    def create_categories
+      categories = ["blues", "rock", "jazz", "pop", "country", "metal", "edm", "reggae", "funk", "grunge", "indie", "punk", "r&b", "classical", "opera" ]
+      categories.each do |cat|
+        Category.create(title: cat, description: cat + " stuff")
+      end
+    end
+
+    def create_loan_requests_for_each_borrower(quantity)
       brw = borrowers
       categories = Category.all
+
       LoanRequest.populate(quantity) do |loan_request|
-        loan_request.user_id = brw.sample.id
         loan_request.title = Faker::Commerce.product_name
         loan_request.description = Faker::Company.catch_phrase
         loan_request.amount = 200
@@ -75,24 +75,22 @@ module EnormousSeed
         loan_request.repayment_rate = 1
         loan_request.contributed = 0
         loan_request.repayed = 0
-
-        LoanRequestsCategory.populate(1) do |lrcategory|
-          lrcategory.loan_request_id = loan_request.id
-          lrcategory.category_id = categories.sample.id
+        loan_request.user_id = brw.sample.id
+        LoanRequestsCategory.populate(2) do |lr_category|
+          lr_category.loan_request_id = loan_request.id
+          lr_category.category_id = categories.sample.id
         end
-
-        puts "There are now #{LoanRequest.count} requests"
       end
     end
 
     def create_orders(quantity)
       possible_donations = %w(25, 50, 75, 100, 125, 150, 175, 200)
       quantity.times do
-        donate = possible_donations.sample
+        donation = possible_donations.sample
         lender = lenders.sample
         request_id = loan_request_ids.sample
         order = Order.create(cart_items:
-                            { "#{request_id}" => donate },
+                            { "#{request_id}" => donation },
                             user_id: lender.id)
         order.update_contributed(lender)
         puts "Created Order by Lender #{lender.name}"
