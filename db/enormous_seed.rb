@@ -1,7 +1,7 @@
 require 'populator'
 require 'faker'
 
-module MassiveSeed
+module EnormousSeed
   class Seed
     def run
       # create_known_users
