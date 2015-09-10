@@ -1,4 +1,5 @@
 require 'populator'
+require 'faker'
 
 module EnormousSeed
   class Seed
@@ -76,8 +77,10 @@ module EnormousSeed
           lrcategory.loan_request_id = loan_request.id
           lrcategory.category_id = Category.all.sample.id
         end
+        puts "There are now #{LoanRequest.count} requests"
+
       end
-      puts "created 10000 loan_requests"
+      # puts "created 10000 loan_requests"
     end
 
     def create_orders(quantity)
