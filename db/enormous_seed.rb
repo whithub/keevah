@@ -3,23 +3,28 @@ require 'populator'
 module EnormousSeed
   class Seed
     def run
+      create_known_users
       create_categories
       25.times { create_lenders }
       6.times  { create_borrowers }
       50.times { create_loan_requests }
-      create_orders
+      create_orders(50000)
     end
 
     def lenders
-      User.where(role: 0)
+      @lenders ||= User.where(role: 0)
     end
 
     def borrowers
-      User.where(role: 1)
+      @borrowers ||= User.where(role: 1)
     end
 
     def orders
-      Order.all
+      @orders ||= Order.all
+    end
+
+    def loan_request_ids
+      @loan_request_ids ||= LoanRequest.pluck(:id)
     end
 
     def create_known_users
@@ -75,14 +80,15 @@ module EnormousSeed
       puts "created 10000 loan_requests"
     end
 
-    def create_orders
-      loan_requests = LoanRequest.take(50000)
+    def create_orders(quantity)
+      # loan_requests = LoanRequest.take(50000)
       possible_donations = %w(25, 50, 75, 100, 125, 150, 175, 200)
-      loan_requests.each do |request|
+      quantity.times do
         donate = possible_donations.sample
         lender = lenders.sample
+        request_id = loan_request_ids.sample
         order = Order.create(cart_items:
-                            { "#{request.id}" => donate },
+                            { "#{request_id}" => donate },
                             user_id: lender.id)
         order.update_contributed(lender)
       end
