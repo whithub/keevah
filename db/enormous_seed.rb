@@ -5,11 +5,11 @@ module EnormousSeed
   class Seed
     def run
       create_known_users
-      create_lenders(200000)
-      create_borrowers(30000)
+      create_lenders(202000)
+      create_borrowers(32000)
       create_categories
-      create_loan_requests(500000)
-      create_orders(50000)
+      create_loan_requests(502000)
+      create_orders(52000)
     end
 
     def lenders
@@ -47,8 +47,8 @@ module EnormousSeed
         user.email = Faker::Internet.email
         user.password_digest = "$2a$10$3SBt75c.BIcW/TO6H58FfOgGpKm47GLTWrb/416u9uS6xSAJS7PL6"
         user.role = 0
+        puts "creating lenders"
       end
-      puts "created #{quantity} lenders"
     end
 
     def create_borrowers(quantity)
@@ -57,7 +57,7 @@ module EnormousSeed
         user.email = Faker::Internet.email
         user.password_digest = "$2a$10$3SBt75c.BIcW/TO6H58FfOgGpKm47GLTWrb/416u9uS6xSAJS7PL6"
         user.role = 1
-        puts "created #{quantity} orders"
+        puts "creating borrowers"
       end
     end
 
@@ -77,7 +77,7 @@ module EnormousSeed
           lrcategory.loan_request_id = loan_request.id
           lrcategory.category_id = Category.all.sample.id
         end
-        puts "There are now #{quantity} requests"
+        puts "There are now #{LoanRequest.count} requests"
       end
     end
 
@@ -92,7 +92,7 @@ module EnormousSeed
                             user_id: lender.id)
         order.update_contributed(lender)
       end
-      puts "created #{quantity} orders"
+      puts "creating orders"
     end
   end
 end
