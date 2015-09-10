@@ -77,7 +77,7 @@ module EnormousSeed
         loan_request.repayed = 0
         loan_request.amount = 200
         LoanRequestsCategory.populate(1) do |lrcategory|
-          lrcategory.loan_request_id = lr.id
+          lrcategory.loan_request_id = loan_request.id
           lrcategory.category_id = Category.all.sample.id
         end
       end
@@ -85,7 +85,7 @@ module EnormousSeed
     end
 
     def create_orders
-      loan_requests = LoanRequest.take(50000)
+      loan_requests = LoanRequest.take(1)
       possible_donations = %w(25, 50, 75, 100, 125, 150, 175, 200)
       loan_requests.each do |request|
         donate = possible_donations.sample
