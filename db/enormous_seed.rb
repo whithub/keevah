@@ -62,8 +62,10 @@ module EnormousSeed
     end
 
     def create_loan_requests(quantity)
+      brw = borrowers
+      categories = Category.all
       LoanRequest.populate(quantity) do |loan_request|
-        loan_request.user_id = borrowers.sample.id
+        loan_request.user_id = brw.sample.id
         loan_request.title = Faker::Commerce.product_name
         loan_request.description = Faker::Company.catch_phrase
         loan_request.status = [0, 1].sample
@@ -75,7 +77,7 @@ module EnormousSeed
         loan_request.amount = 200
         LoanRequestsCategory.populate(1) do |lrcategory|
           lrcategory.loan_request_id = loan_request.id
-          lrcategory.category_id = Category.all.sample.id
+          lrcategory.category_id = categories.all.sample.id
         end
         puts "There are now #{LoanRequest.count} requests"
       end
