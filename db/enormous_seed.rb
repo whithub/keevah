@@ -4,9 +4,9 @@ module EnormousSeed
   class Seed
     def run
       create_categories
-      25.times { create_lenders }
-      6.times  { create_borrowers }
-      50.times { create_loan_requests }
+      1.times { create_lenders }
+      1.times  { create_borrowers }
+      1.times { create_loan_requests }
       create_orders
     end
 
@@ -40,12 +40,12 @@ module EnormousSeed
       categories = Category.all
 
       LoanRequest.all.each do |request|
-        categories.sample(1).first.loan_requests << request
+        categories.sample(1).loan_requests << request
       end
     end
 
     def create_lenders
-      User.populate(8000) do |user|
+      User.populate(8) do |user|
         user.name = Faker::Name.name
         user.email = Faker::Internet.email
         user.password_digest = "$2a$10$3SBt75c.BIcW/TO6H58FfOgGpKm47GLTWrb/416u9uS6xSAJS7PL6"
@@ -55,7 +55,7 @@ module EnormousSeed
     end
 
     def create_borrowers
-      User.populate(5000) do |user|
+      User.populate(5) do |user|
         user.name = Faker::Name.name
         user.email = Faker::Internet.email
         user.password_digest = "$2a$10$3SBt75c.BIcW/TO6H58FfOgGpKm47GLTWrb/416u9uS6xSAJS7PL6"
@@ -65,7 +65,7 @@ module EnormousSeed
     end
 
     def create_loan_requests
-      LoanRequest.populate(10000) do |loan_request|
+      LoanRequest.populate(10) do |loan_request|
         loan_request.user_id = borrowers.sample.id
         loan_request.title = Faker::Commerce.product_name
         loan_request.description = Faker::Company.catch_phrase
@@ -80,7 +80,7 @@ module EnormousSeed
     end
 
     def create_orders
-      loan_requests = LoanRequest.all.sample(50000)
+      loan_requests = LoanRequest.all.sample(5)
       possible_donations = %w(25, 50, 75, 100, 125, 150, 175, 200)
       loan_requests.each do |request|
         donate = possible_donations.sample
