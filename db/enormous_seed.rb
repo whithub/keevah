@@ -40,7 +40,7 @@ module EnormousSeed
       categories = Category.all
 
       LoanRequest.all.each do |request|
-        categories.sample(1).loan_requests << request
+        categories.take(1).first.loan_requests << request
       end
     end
 
