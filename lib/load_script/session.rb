@@ -63,6 +63,13 @@ module LoadScript
       session.all(".lr-about").sample.click
     end
 
+    # def browse_categories
+    #   puts "browsing categories"
+    #   session.visit "#{host}/browse"
+    #   categories = Category.all
+    #   session.find("#categories-dropdown").find("#{categories.sample.title}").select_option
+    # end
+
     def log_out
       session.visit host
       if session.has_content?("Log out")
@@ -92,7 +99,6 @@ module LoadScript
     end
 
     def categories
-      ["Agriculture", "Education", "Community"]
-    end
+      ["blues", "rock", "jazz", "pop", "country", "metal", "edm", "reggae", "funk", "grunge", "indie", "punk", "r&b", "classical", "opera" ]    end
   end
 end
