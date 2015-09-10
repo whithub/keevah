@@ -5,8 +5,8 @@ module EnormousSeed
   class Seed
     def run
       create_known_users
-      create_lenders(202000)
       create_borrowers(32000)
+      create_lenders(202000)
       create_categories
       create_loan_requests(502000)
       create_orders(52000)
