@@ -15,7 +15,7 @@ end
 #if __FILE__ == $0
   #1.times.map do
     #Thread.new do
-      #if ARGV[0] #host rake load_script:run localhost...
+      #if ARGV[0] #host rake load_script:run https://optimized.herokuapp.com/
         #Session.new(ARGV[0]).run
       #else
         #Session.new.run

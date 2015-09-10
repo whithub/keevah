@@ -88,11 +88,10 @@ module EnormousSeed
     def create_orders(quantity)
       possible_donations = %w(25, 50, 75, 100, 125, 150, 175, 200)
       quantity.times do
-        donation = possible_donations.sample
         lender = lenders.sample
         request_id = loan_request_ids.sample
         order = Order.create(cart_items:
-                            { "#{request_id}" => donation },
+                            { "#{request_id}" => possible_donations.sample },
                             user_id: lender.id)
         order.update_contributed(lender)
         puts "Created Order by Lender #{lender.name}"
