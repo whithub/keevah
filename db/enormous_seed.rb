@@ -72,7 +72,7 @@ module EnormousSeed
         loan_request.status = [0, 1].sample
         loan_request.repayment_begin_date = Faker::Time.between(3.days.ago, Time.now)
         loan_request.requested_by_date = Faker::Time.between(7.days.ago, 3.days.ago)
-        loan_request.contributed = "0"
+        loan_request.contributed = 0
         loan_request.repayment_rate = 1
         loan_request.amount = 200
       end
