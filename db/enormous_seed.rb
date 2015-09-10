@@ -68,17 +68,19 @@ module EnormousSeed
         loan_request.user_id = brw.sample.id
         loan_request.title = Faker::Commerce.product_name
         loan_request.description = Faker::Company.catch_phrase
-        loan_request.status = [0, 1].sample
-        loan_request.repayment_begin_date = Faker::Time.between(3.days.ago, Time.now)
-        loan_request.requested_by_date = Faker::Time.between(7.days.ago, 3.days.ago)
-        loan_request.contributed = 0
-        loan_request.repayment_rate = 1
-        loan_request.repayed = 0
         loan_request.amount = 200
+        loan_request.status = [0, 1].sample
+        loan_request.requested_by_date = Faker::Time.between(7.days.ago, 3.days.ago)
+        loan_request.repayment_begin_date = Faker::Time.between(3.days.ago, Time.now)
+        loan_request.repayment_rate = 1
+        loan_request.contributed = 0
+        loan_request.repayed = 0
+
         LoanRequestsCategory.populate(1) do |lrcategory|
           lrcategory.loan_request_id = loan_request.id
-          lrcategory.category_id = categories.all.sample.id
+          lrcategory.category_id = categories.sample.id
         end
+
         puts "There are now #{LoanRequest.count} requests"
       end
     end
