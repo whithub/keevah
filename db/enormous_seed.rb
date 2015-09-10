@@ -33,16 +33,16 @@ module EnormousSeed
       categories.each do |cat|
         Category.create(title: cat, description: cat + " stuff")
       end
-      put_requests_in_categories
+      # put_requests_in_categories
     end
 
-    def put_requests_in_categories
-      categories = Category.all
-
-      LoanRequest.all.each do |request|
-        categories.sample(1).first.loan_requests << request
-      end
-    end
+    # def put_requests_in_categories
+    #   categories = Category.all
+    #
+    #   LoanRequest.all.each do |request|
+    #     categories.sample(1).first.loan_requests << request
+    #   end
+    # end
 
     def create_lenders
       User.populate(8) do |user|
@@ -66,7 +66,7 @@ module EnormousSeed
 
     def create_loan_requests
       LoanRequest.populate(1) do |loan_request|
-        loan_request.user_id = borrowers.sample.first.id
+        loan_request.user_id = borrowers.sample.id
         loan_request.title = Faker::Commerce.product_name
         loan_request.description = Faker::Company.catch_phrase
         loan_request.status = [0, 1].sample
@@ -76,16 +76,20 @@ module EnormousSeed
         loan_request.repayment_rate = 1
         loan_request.repayed = 0
         loan_request.amount = 200
+        LoanRequestsCategory.populate(1) do |lrcategory|
+          lrcategory.loan_request_id = lr.id
+          lrcategory.category_id = Category.all.sample.id
+        end
       end
       puts "created 10000 loan_requests"
     end
 
     def create_orders
-      loan_requests = LoanRequest.all.sample(5)
+      loan_requests = LoanRequest.take(50000)
       possible_donations = %w(25, 50, 75, 100, 125, 150, 175, 200)
       loan_requests.each do |request|
         donate = possible_donations.sample
-        lender = lenders.first
+        lender = lenders.sample
         order = Order.create(cart_items:
                             { "#{request.id}" => donate },
                             user_id: lender.id)
@@ -93,6 +97,5 @@ module EnormousSeed
       end
       puts "created 50000 orders"
     end
-
   end
 end
