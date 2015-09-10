@@ -47,7 +47,7 @@ module EnormousSeed
         user.email = Faker::Internet.email
         user.password_digest = "$2a$10$3SBt75c.BIcW/TO6H58FfOgGpKm47GLTWrb/416u9uS6xSAJS7PL6"
         user.role = 0
-        puts "creating lenders"
+        puts "creating #{User.count}lenders"
       end
     end
 
@@ -57,7 +57,7 @@ module EnormousSeed
         user.email = Faker::Internet.email
         user.password_digest = "$2a$10$3SBt75c.BIcW/TO6H58FfOgGpKm47GLTWrb/416u9uS6xSAJS7PL6"
         user.role = 1
-        puts "creating borrowers"
+        puts "creating #{User.count} borrowers"
       end
     end
 
@@ -92,7 +92,7 @@ module EnormousSeed
                             user_id: lender.id)
         order.update_contributed(lender)
       end
-      puts "creating orders"
+      puts "creating #{Order.count} orders"
     end
   end
 end
