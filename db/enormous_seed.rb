@@ -4,10 +4,10 @@ require 'faker'
 module EnormousSeed
   class Seed
     def run
-      # create_known_users
+      create_known_users
       # create_borrowers(32000)
       # create_lenders(202000)
-      # create_categories
+      create_categories
       # create_loan_requests_for_each_borrower(502000)
       create_orders(52000)
     end
