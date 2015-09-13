@@ -147,7 +147,11 @@ module LoadScript
     end
 
     def lender_makes_loan
-      skip
+      sign_up_as_lender
+      view_individual_LR
+      session.click_on("Contribute $25")
+      session.click_on("Basket")
+      session.click_on("Transfer Funds")
     end
 
     def browse_loan_requests
