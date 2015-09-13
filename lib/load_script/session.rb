@@ -134,7 +134,7 @@ module LoadScript
         session.fill_in("loan_request_description", with: new_request_description)
         session.fill_in("loan_request_requested_by_date", with: new_requested_by_date)
         session.fill_in("loan_request_repayment_date", with: new_repayment_begin_date)
-        session.select("Agriculture", from: "loan_request_category")
+        session.select("blues", from: "loan_request_category")
         session.fill_in("loan_request_amount", with: "100")
         session.click_link_or_button("Submit")
       end
@@ -160,7 +160,8 @@ module LoadScript
     end
 
     def browse_pages_of_LR
-      skip
+      session.visit "#{host}/browse"
+      session.all(".apple_pagination a").sample.click
     end
 
     def browse_category
@@ -170,7 +171,8 @@ module LoadScript
     end
 
     def browse_pages_of_categories
-      skip
+      browse_category
+      session.all(".apple_pagination a").sample.click
     end
 
   end
