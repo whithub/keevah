@@ -69,16 +69,48 @@ module LoadScript
       "TuringPivotBots+#{name.split.join}@gmail.com"
     end
 
+    def new_request_title
+      "#{Faker::Commerce.product_name} #{Time.now.to_i}"
+    end
+
+    def new_request_description
+      "#{Faker::Company.catch_phrase} #{Time.now.to_i}"
+    end
+
+    def new_requested_by_date
+      Faker::Time.between(7.days.ago, 3.days.ago)
+    end
+
+    def new_repayment_begin_date
+      Faker::Time.between(3.days.ago, Time.now)
+    end
+
     def categories
-      ["blues", "rock", "jazz", "pop", "country", "metal", "edm", "reggae", "funk", "grunge", "indie", "punk", "r&b", "classical", "opera" ]
+      ["blues", "rock", "jazz", "pop",
+        "country", "metal", "edm", "reggae",
+        "funk", "grunge", "indie", "punk",
+        "r&b", "classical", "opera" ]
     end
 
     def actions
-      [:sign_up_as_lender, :sign_up_as_borrower,
-       :lender_makes_loan, :borrower_creates_LR,
+      [:sign_up_as_borrower, :sign_up_as_lender,
+       :borrower_creates_LR, :lender_makes_loan,
        :browse_loan_requests, :browse_pages_of_LR,
        :view_individual_LR,
        :browse_categories, :browse_pages_of_categories]
+    end
+
+    def sign_up_as_borrower(name = new_user_name)
+      log_out
+      session.find("#sign-up-dropdown").click
+      session.find("#sign-up-as-borrower").click
+      session.within("#borrowerSignUpModal") do
+        session.fill_in("user_name", with: name)
+        session.fill_in("user_email", with: new_user_email(name))
+        session.fill_in("user_password", with: "password")
+        session.fill_in("user_password_confirmation", with: "password")
+        session.click_link_or_button "Create Account"
+      end
     end
 
     def sign_up_as_lender(name = new_user_name)
@@ -94,15 +126,15 @@ module LoadScript
       end
     end
 
-    def sign_up_as_borrower
+    def borrower_creates_LR
+      skip
+    end
+
+    def view_individual_LR
       skip
     end
 
     def lender_makes_loan
-      skip
-    end
-
-    def borrower_creates_LR
       skip
     end
 
@@ -112,10 +144,6 @@ module LoadScript
     end
 
     def browse_pages_of_LR
-      skip
-    end
-
-    def view_individual_LR
       skip
     end
 

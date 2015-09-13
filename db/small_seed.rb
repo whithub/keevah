@@ -71,20 +71,18 @@ module SmallSeed
           title = Faker::Commerce.product_name
           description = Faker::Company.catch_phrase
           status = [0, 1].sample
-          request_by =
-            Faker::Time.between(7.days.ago, 3.days.ago)
-          repayment_begin_date =
-            Faker::Time.between(3.days.ago, Time.now)
+          request_by = Faker::Time.between(7.days.ago, 3.days.ago)
+          repayment_begin_date = Faker::Time.between(3.days.ago, Time.now)
           amount = "200"
           contributed = "0"
           request = borrower.loan_requests.create(title: title,
-            description: description,
-            amount: amount,
-            status: status,
-            requested_by_date: request_by,
-            contributed: contributed,
-            repayment_rate: "weekly",
-            repayment_begin_date: repayment_begin_date)
+                                                  description: description,
+                                                  amount: amount,
+                                                  status: status,
+                                                  requested_by_date: request_by,
+                                                  contributed: contributed,
+                                                  repayment_rate: "weekly",
+                                                  repayment_begin_date: repayment_begin_date)
           puts "created loan request #{request.title} for #{borrower.name}"
           puts "There are now #{LoanRequest.count} requests"
         end
