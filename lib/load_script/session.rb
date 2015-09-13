@@ -97,7 +97,7 @@ module LoadScript
        :borrower_creates_LR, :lender_makes_loan,
        :browse_loan_requests, :browse_pages_of_LR,
        :view_individual_LR,
-       :browse_categories, :browse_pages_of_categories]
+       :browse_category, :browse_pages_of_categories]
     end
 
     def sign_up_as_borrower(name = new_user_name)
@@ -141,7 +141,9 @@ module LoadScript
     end
 
     def view_individual_LR
-      skip
+      log_in
+      session.visit "#{host}/browse"
+      session.all("a.lr-about").sample.click
     end
 
     def lender_makes_loan
@@ -157,7 +159,7 @@ module LoadScript
       skip
     end
 
-    def browse_categories
+    def browse_category
       session.visit "#{host}/browse"
       categories = Category.all
       session.find("#category-dropdown").find("#{categories.sample.title}").select_option
