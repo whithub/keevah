@@ -127,7 +127,17 @@ module LoadScript
     end
 
     def borrower_creates_LR
-      skip
+      sign_up_as_borrower
+      session.click_on("Create Loan Request")
+      session.within("#loanRequestModal") do
+        session.fill_in("loan_request_title", with: new_request_title)
+        session.fill_in("loan_request_description", with: new_request_description)
+        session.fill_in("loan_request_requested_by_date", with: new_requested_by_date)
+        session.fill_in("loan_request_repayment_date", with: new_repayment_begin_date)
+        session.select("Agriculture", from: "loan_request_category")
+        session.fill_in("loan_request_amount", with: "100")
+        session.click_link_or_button("Submit")
+      end
     end
 
     def view_individual_LR
