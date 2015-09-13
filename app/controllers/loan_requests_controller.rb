@@ -4,7 +4,7 @@ class LoanRequestsController < ApplicationController
   def index
     # @loan_requests = LoanRequest.all
     @loan_requests = LoanRequest.paginate(:page => params[:page], :per_page => 9 )
-
+    # @categories = Category.all
   end
 
   def create

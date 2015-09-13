@@ -45,10 +45,6 @@ module LoadScript
       val
     end
 
-    def actions
-      [:browse_loan_requests, :sign_up_as_lender]
-    end
-
     def log_in(email="demo+horace@jumpstartlab.com", pw="password")
       log_out
       session.visit host
@@ -57,18 +53,6 @@ module LoadScript
       session.fill_in("password", with: pw)
       session.click_link_or_button("Login")
     end
-
-    def browse_loan_requests
-      session.visit "#{host}/browse"
-      session.all(".lr-about").sample.click
-    end
-
-    # def browse_categories
-    #   puts "browsing categories"
-    #   session.visit "#{host}/browse"
-    #   categories = Category.all
-    #   session.find("#categories-dropdown").find("#{categories.sample.title}").select_option
-    # end
 
     def log_out
       session.visit host
@@ -85,6 +69,18 @@ module LoadScript
       "TuringPivotBots+#{name.split.join}@gmail.com"
     end
 
+    def categories
+      ["blues", "rock", "jazz", "pop", "country", "metal", "edm", "reggae", "funk", "grunge", "indie", "punk", "r&b", "classical", "opera" ]
+    end
+
+    def actions
+      [:sign_up_as_lender, :sign_up_as_borrower,
+       :lender_makes_loan, :borrower_creates_LR,
+       :browse_loan_requests, :browse_pages_of_LR,
+       :view_individual_LR,
+       :browse_categories, :browse_pages_of_categories]
+    end
+
     def sign_up_as_lender(name = new_user_name)
       log_out
       session.find("#sign-up-dropdown").click
@@ -98,7 +94,40 @@ module LoadScript
       end
     end
 
-    def categories
-      ["blues", "rock", "jazz", "pop", "country", "metal", "edm", "reggae", "funk", "grunge", "indie", "punk", "r&b", "classical", "opera" ]    end
+    def sign_up_as_borrower
+      skip
+    end
+
+    def lender_makes_loan
+      skip
+    end
+
+    def borrower_creates_LR
+      skip
+    end
+
+    def browse_loan_requests
+      session.visit "#{host}/browse"
+      session.all(".lr-about").sample.click
+    end
+
+    def browse_pages_of_LR
+      skip
+    end
+
+    def view_individual_LR
+      skip
+    end
+
+    def browse_categories
+      session.visit "#{host}/browse"
+      categories = Category.all
+      session.find("#category-dropdown").find("#{categories.sample.title}").select_option
+    end
+
+    def browse_pages_of_categories
+      skip
+    end
+
   end
 end
