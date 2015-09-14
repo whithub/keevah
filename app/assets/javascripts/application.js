@@ -12,4 +12,14 @@
 //
 //= require jquery
 //= require jquery_ujs
+const $ = require('jquery');
+
+//= require_self
 //= require_tree .
+
+$(document).ready(function() {
+  // This works when you paste it into Chrome
+  $('#category-list').change(function() {
+    alert( "Category dropdown for .change() called." );
+  });
+});
