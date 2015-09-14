@@ -25,6 +25,9 @@
     <% @current_cart.cart_items_and_amount.each do |loan_request, amount| %>
       <tr>
         <td></td>
+
+        <% cache loan_request, amount do %>
+
         <td><%= loan_request.title %></td>
         <td><%= loan_request.user.name.capitalize %></td>
         <td><%= loan_request.repayment_begin %></td>
@@ -38,6 +41,9 @@
           <td><%= button_to "$25", {controller: "cart", action: "update", loan_request_id: loan_request.id, quantity: "decrease" } , method: "put", class: "btn-small btn-danger"  %></td>
         </div>
         <td><%= link_to "Remove from Basket", cart_path(loan_request), method: "delete" %></td>
+
+        <% end %>
+
       </tr>
     <% end %>
   <% else %>

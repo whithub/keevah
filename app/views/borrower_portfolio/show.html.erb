@@ -27,27 +27,31 @@
         <tbody>
         <% @loan_requests.each do |loan_request| %>
           <tr>
-          <td class="text-center"><%= loan_request.updated_formatted %></td>
-          <td class="text-center"><%= loan_request.title %></td>
-          <td class="text-center"><%= number_to_currency(loan_request.contributed) %></td>
-          <td class="text-center"><%= loan_request.repayment_begin %></td>
-          <td class="text-center"><%= loan_request.repayment_rate.capitalize %></td>
-          <td class="text-center"><%= loan_request.repayment_due_date %></td>
-          <div class="row">
-            <td class="text-center">
-              <%= form_tag payment_path(loan_request), method: :put do %>
-                <%= hidden_field_tag :borrower_id, @borrower.id %>
-              <div class="col-xs-6">
-                <%= number_field_tag :payment, loan_request.minimum_payment, in: loan_request.minimum_payment..loan_request.contributed, step: 10 %>
-              </div>
-              <div class="col-xs-3">
-                <%= submit_tag "Submit", class: "btn-small btn-info" %>
-              </div>
-            <% end %>
-            </td>
-          </div>
-        </tr>
-      <% end %>
+
+          <% cache item do %>
+            <td class="text-center"><%= loan_request.updated_formatted %></td>
+            <td class="text-center"><%= loan_request.title %></td>
+            <td class="text-center"><%= number_to_currency(loan_request.contributed) %></td>
+            <td class="text-center"><%= loan_request.repayment_begin %></td>
+            <td class="text-center"><%= loan_request.repayment_rate.capitalize %></td>
+            <td class="text-center"><%= loan_request.repayment_due_date %></td>
+            <div class="row">
+              <td class="text-center">
+                <%= form_tag payment_path(loan_request), method: :put do %>
+                  <%= hidden_field_tag :borrower_id, @borrower.id %>
+                <div class="col-xs-6">
+                  <%= number_field_tag :payment, loan_request.minimum_payment, in: loan_request.minimum_payment..loan_request.contributed, step: 10 %>
+                </div>
+                <div class="col-xs-3">
+                  <%= submit_tag "Submit", class: "btn-small btn-info" %>
+                </div>
+              <% end %>
+              </td>
+            </div>
+          <% end %>
+
+          </tr>
+        <% end %>
         </tbody>
       </table>
     </div>

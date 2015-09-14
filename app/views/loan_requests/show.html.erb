@@ -31,8 +31,10 @@
         <li>Begins Repayment on <%= @loan_request.repayment_begin %></li>
         <li>Repayment rate: <%= @loan_request.repayment_rate.capitalize %></li>
         <li>Category: <% @loan_request.categories.each do |cat| %>
-          <%= cat.title.capitalize %>
-        <% end %>
+            <% cache cat do %>
+              <%= cat.title.capitalize %>
+            <% end %>>
+        <% end %>w
         </li>
         <li>Loan Amount: <%= number_to_currency(@loan_request.amount) %></li>
         <li>Loan Contribution: <%= number_to_currency(@loan_request.contributed) %></li>
