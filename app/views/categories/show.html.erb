@@ -8,16 +8,11 @@
 
       <% @categories.each do |category| %>
         <% cache category do %>
-        <%= link_to category.title, category %>
+          <%= link_to category.title, category %>
         <% end %>
       <% end %>
 
-      <!--<select class="form-control btn-info" id="category-list">-->
-        <!--<option value="farming">Farming</option>-->
-        <!--<option value="education">Education</option>-->
-        <!--<option value="medical">Medical</option>-->
-        <!--<option value="repair">Women</option>-->
-      <!--</select>-->
+
     </div>
 
     <%= render "shared/search" %>

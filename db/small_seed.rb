@@ -10,11 +10,11 @@ module SmallSeed
     end
 
     def lenders
-      User.where(role: 0)
+      @lenders ||= User.where(role: 0)
     end
 
     def borrowers
-      User.where(role: 1)
+      @borrowers ||= User.where(role: 1)
     end
 
     def orders
