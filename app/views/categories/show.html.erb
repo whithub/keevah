@@ -6,12 +6,11 @@
   <div class="row">
     <div class="col-md-3 pull-left">
 
-      <% @categories.each do |category| %>
-        <% cache category do %>
-          <%= link_to category.title, category %>
+        <% @categories.each do |category| %>
+          <% cache category do %>
+            <%= link_to category.title.capitalize!, category %>
+          <% end %>
         <% end %>
-      <% end %>
-
 
     </div>
 
