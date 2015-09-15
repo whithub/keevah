@@ -26,7 +26,6 @@
       <tr>
         <td></td>
 
-        <% cache loan_request, amount do %>
 
         <td><%= loan_request.title %></td>
         <td><%= loan_request.user.name.capitalize %></td>
@@ -42,7 +41,6 @@
         </div>
         <td><%= link_to "Remove from Basket", cart_path(loan_request), method: "delete" %></td>
 
-        <% end %>
 
       </tr>
     <% end %>
