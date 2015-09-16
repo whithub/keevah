@@ -80,6 +80,10 @@ module LoadScript
       "#{Faker::Company.catch_phrase} #{Time.now.to_i}"
     end
 
+    def new_request_image
+      @image ||= DefaultImages.random
+    end
+
     def new_requested_by_date
       Faker::Time.between(7.days.ago, 3.days.ago)
     end
@@ -141,6 +145,7 @@ module LoadScript
       session.within("#loanRequestModal") do
         session.fill_in("loan_request_title", with: new_request_title)
         session.fill_in("loan_request_description", with: new_request_description)
+        session.fill_in("loan_request_image_url", with: new_request_image)
         session.fill_in("loan_request_requested_by_date", with: new_requested_by_date)
         session.fill_in("loan_request_repayment_date", with: new_repayment_begin_date)
         session.select("blues", from: "loan_request_category")
