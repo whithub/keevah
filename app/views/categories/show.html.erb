@@ -5,10 +5,8 @@
 <div class="container">
   <div class="row">
     <div class="col-md-3 pull-left">
-      <% cache @categories do %>
-        <% @categories.each do |category| %>
-          <%= link_to category.title.capitalize!, category %>
-        <% end %>
+      <% @categories.each do |category| %>
+        <%= link_to category.title.capitalize!, category %>
       <% end %>
 
     </div>

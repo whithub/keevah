@@ -2,7 +2,10 @@ class LoanRequestsController < ApplicationController
   before_action :set_loan_request, only: [:update, :show]
 
   def index
-    @loan_requests = LoanRequest.paginate(:page => params[:page], :per_page => 12 )
+    last_loan_request = LoanRequest.last
+    @loan_requests = Rails.cache.fetch("loan-requests-page-#{params[:page] || 1}-#{last_loan_request.created_at}") do
+      LoanRequest.paginate(:page => params[:page], :per_page => 12 )
+    end
     @categories = Category.all
   end
 
