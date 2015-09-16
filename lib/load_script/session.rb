@@ -48,11 +48,11 @@ module LoadScript
     def log_in(email="demo+horace@jumpstartlab.com", pw="password")
       puts "user(s) are logging in"
       log_out
-      session.visit host
+      session.visit "#{host}"
       session.click_link("Login")
-      session.fill_in("email_address", with: email)
-      session.fill_in("password", with: pw)
-      session.click_link_or_button("Login")
+      session.fill_in("session_email", with: email)
+      session.fill_in("session_password", with: pw)
+      session.click_link_or_button("Log In")
     end
 
     def log_out
@@ -93,10 +93,11 @@ module LoadScript
     end
 
     def categories
-      ["blues", "rock", "jazz", "pop",
-        "country", "metal", "edm", "reggae",
-        "funk", "grunge", "indie", "punk",
-        "r&b", "classical", "opera" ]
+      # ["blues", "rock", "jazz", "pop",
+      #   "country", "metal", "edm", "reggae",
+      #   "funk", "grunge", "indie", "punk",
+      #   "r&b", "classical", "opera" ]
+      ["agriculture", "education", "community"]
     end
 
     def actions
@@ -147,8 +148,8 @@ module LoadScript
         session.fill_in("loan_request_description", with: new_request_description)
         session.fill_in("loan_request_image_url", with: new_request_image)
         session.fill_in("loan_request_requested_by_date", with: new_requested_by_date)
-        session.fill_in("loan_request_repayment_date", with: new_repayment_begin_date)
-        session.select("blues", from: "loan_request_category")
+        session.fill_in("loan_request_repayment_begin_date", with: new_repayment_begin_date)
+        session.select("Agriculture", from: "loan_request_category")
         session.fill_in("loan_request_amount", with: "100")
         session.click_link_or_button("Submit")
       end
@@ -159,7 +160,7 @@ module LoadScript
 
       log_in
       session.visit "#{host}/browse"
-      session.all("a.lr-about").sample.click
+      session.all(".lr-about").sample.click
     end
 
     def lender_makes_loan
@@ -191,7 +192,8 @@ module LoadScript
 
       session.visit "#{host}/browse"
       categories = Category.all
-      session.find("#category-dropdown").find("#{categories.sample.title}").select_option
+      session.find("#categories-list").all("a").sample.click
+        # find("#{categories.sample.title}").click
     end
 
     def browse_pages_of_categories
