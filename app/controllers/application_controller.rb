@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   before_action :create_cart
 
   def create_cart
-    @current_cart = Cart.new(session[:cart])
+    @current_cart ||= Cart.new(session[:cart])
   end
 
   def current_user

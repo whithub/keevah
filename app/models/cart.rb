@@ -12,7 +12,9 @@ class Cart
 
   def cart_items_and_amount
     loan_request = Hash.new
-    cart_items.select { |loan_request_id, amount| loan_request[LoanRequest.find(loan_request_id)] = amount }
+    cart_items.select do |loan_request_id, amount|
+      loan_request[LoanRequest.includes(:user).find(loan_request_id)] = amount
+    end
     loan_request
   end
 

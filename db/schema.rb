@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150904175052) do
+ActiveRecord::Schema.define(version: 20150916040517) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 20150904175052) do
   end
 
   add_index "loan_requests_categories", ["category_id"], name: "index_loan_requests_categories_on_category_id", using: :btree
+  add_index "loan_requests_categories", ["loan_request_id", "category_id"], name: "load_req_compound", using: :btree
   add_index "loan_requests_categories", ["loan_request_id"], name: "index_loan_requests_categories_on_loan_request_id", using: :btree
 
   create_table "loan_requests_contributors", force: :cascade do |t|
@@ -56,6 +57,7 @@ ActiveRecord::Schema.define(version: 20150904175052) do
     t.datetime "updated_at"
   end
 
+  add_index "loan_requests_contributors", ["loan_request_id", "user_id"], name: "load_req_contrib_compound", using: :btree
   add_index "loan_requests_contributors", ["loan_request_id"], name: "index_loan_requests_contributors_on_loan_request_id", using: :btree
   add_index "loan_requests_contributors", ["user_id"], name: "index_loan_requests_contributors_on_user_id", using: :btree
 
@@ -66,6 +68,8 @@ ActiveRecord::Schema.define(version: 20150904175052) do
     t.datetime "updated_at"
     t.integer  "status",     default: 0
   end
+
+  add_index "orders", ["user_id"], name: "index_orders_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.text    "password_digest"
