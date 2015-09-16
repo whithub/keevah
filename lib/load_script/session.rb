@@ -46,6 +46,7 @@ module LoadScript
     end
 
     def log_in(email="demo+horace@jumpstartlab.com", pw="password")
+      puts "user(s) are logging in"
       log_out
       session.visit host
       session.click_link("Log In")
@@ -55,6 +56,8 @@ module LoadScript
     end
 
     def log_out
+      puts "user(s) are logging out"
+
       session.visit host
       if session.has_content?("Log out")
         session.find("#logout").click
@@ -101,6 +104,8 @@ module LoadScript
     end
 
     def sign_up_as_borrower(name = new_user_name)
+      puts "signing up as borrower"
+
       log_out
       session.find("#sign-up-dropdown").click
       session.find("#sign-up-as-borrower").click
@@ -114,6 +119,8 @@ module LoadScript
     end
 
     def sign_up_as_lender(name = new_user_name)
+      puts "signing up as lender"
+
       log_out
       session.find("#sign-up-dropdown").click
       session.find("#sign-up-as-lender").click
@@ -127,6 +134,8 @@ module LoadScript
     end
 
     def borrower_creates_LR
+      puts "borrower(s) create loan requests"
+
       sign_up_as_borrower
       session.click_on("Create Loan Request")
       session.within("#loanRequestModal") do
@@ -141,12 +150,16 @@ module LoadScript
     end
 
     def view_individual_LR
+      puts "user(s) are viewing individual loan request"
+
       log_in
       session.visit "#{host}/browse"
       session.all("a.lr-about").sample.click
     end
 
     def lender_makes_loan
+      puts "lender(s) are making loan(s)"
+
       sign_up_as_lender
       view_individual_LR
       session.click_on("Contribute $25")
@@ -155,22 +168,30 @@ module LoadScript
     end
 
     def browse_loan_requests
+      puts "user(s) are browsing loan requests"
+
       session.visit "#{host}/browse"
       session.all(".lr-about").sample.click
     end
 
     def browse_pages_of_LR
+      puts "user(s) are browsing pages of loan requests"
+
       session.visit "#{host}/browse"
       session.all(".apple_pagination a").sample.click
     end
 
     def browse_category
+      puts "user(s) are browsing a category"
+
       session.visit "#{host}/browse"
       categories = Category.all
       session.find("#category-dropdown").find("#{categories.sample.title}").select_option
     end
 
     def browse_pages_of_categories
+      puts "user(s) are browsing pages of categories"
+
       browse_category
       session.all(".apple_pagination a").sample.click
     end
