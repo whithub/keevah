@@ -49,7 +49,7 @@ module LoadScript
       puts "user(s) are logging in"
       log_out
       session.visit host
-      session.click_link("Log In")
+      session.click_link("Login")
       session.fill_in("email_address", with: email)
       session.fill_in("password", with: pw)
       session.click_link_or_button("Login")
